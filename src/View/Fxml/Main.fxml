@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="525.0" tabClosingPolicy="UNAVAILABLE" tabMinHeight="25.0" tabMinWidth="150.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" >
+  <tabs>
+    <Tab text="个人界面">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="419.0" prefWidth="525.0">
+                     <children>
+                        <Arc fx:id="RateArc" fill="#f70000" layoutX="389.0" layoutY="276.0" length="360.0" radiusX="100.0" radiusY="100.0" startAngle="90.0" stroke="TRANSPARENT" strokeType="INSIDE" type="ROUND" />
+                        <Circle fill="#1f93ff00" layoutX="389.0" layoutY="276.0" radius="100.0" stroke="BLACK" strokeType="INSIDE" />
+                        <Circle fill="#fdfeff" layoutX="389.0" layoutY="276.0" radius="71.0" stroke="BLACK" strokeType="INSIDE" />
+                        <Text layoutX="61.0" layoutY="156.0" strokeType="OUTSIDE" strokeWidth="0.0" text="总收益" />
+                        <Text layoutX="61.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="最近7天收益" />
+                        <Text layoutX="61.0" layoutY="301.0" strokeType="OUTSIDE" strokeWidth="0.0" text="最近30天收益" />
+                        <Text layoutX="347.0" layoutY="148.0" strokeType="OUTSIDE" strokeWidth="0.0" text="今日目标完成度" />
+                        <Text layoutX="347.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="每日目标：" />
+                        <Text fx:id="target" layoutX="424.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                        <Text fx:id="balance" layoutX="68.0" layoutY="187.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                           <font>
+                              <Font name="Cambria" size="12.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="weekIncome" layoutX="67.0" layoutY="259.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                        <Text fx:id="monthIncome" layoutX="67.0" layoutY="335.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                        <Button fx:id="exitbutton" layoutX="479.0" layoutY="382.0" mnemonicParsing="false" opacity="0.8" text="退出" />
+                        <StackPane fx:id="Stack" layoutX="288.0" layoutY="177.0" prefHeight="199.0" prefWidth="201.0">
+                           <children>
+                              <Text fx:id="rateText" boundsType="VISUAL" strokeType="OUTSIDE" strokeWidth="0.0" text="60%" wrappingWidth="121.99999299645424">
+                                 <font>
+                                    <Font size="45.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </StackPane>
+                     </children>
+                  </Pane>
+               </children></AnchorPane>
+      </content>
+    </Tab>
+    <Tab text="曲线图">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <LineChart fx:id="lineChart" layoutX="41.0" layoutY="34.0" prefHeight="351.0" prefWidth="443.0">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" fx:id="xAxis" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis fx:id="yAxis" side="LEFT" />
+                    </yAxis>
+                  </LineChart>
+               </children></AnchorPane>
+      </content>
+    </Tab>
+      <Tab fx:id="RecordView" text="历史记录">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <TextField fx:id="Income" layoutX="20.0" layoutY="13.0" prefHeight="23.0" prefWidth="92.0" promptText="金额" />
+                  <TextField fx:id="note" layoutX="130.0" layoutY="13.0" prefHeight="23.0" prefWidth="105.0" promptText="备注" />
+                  <Button fx:id="insert" layoutX="335.0" layoutY="13.0" mnemonicParsing="false" text="插入" />
+                  <Button fx:id="update" layoutX="398.0" layoutY="13.0" mnemonicParsing="false" text="更改" />
+                  <Button fx:id="delete" layoutX="457.0" layoutY="13.0" mnemonicParsing="false" text="删除" />
+                  <TableView fx:id="Table" layoutY="53.0" prefHeight="366.0" prefWidth="525.0">
+                     <columns>
+                        <TableColumn fx:id="dateColumn" prefWidth="173.0" text="日期" />
+                        <TableColumn fx:id="moneyColumn" prefWidth="169.0" text="金额" />
+                        <TableColumn fx:id="noteColumn" prefWidth="182.0" text="备注" />
+                     </columns>
+                  </TableView>
+                  <Text fx:id="failTip" fill="#f50505" layoutX="20.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="操作失败，请规范数据" visible="false" wrappingWidth="134.240234375">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="successTip" fill="#64eb07" layoutX="20.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="操作成功" visible="false">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Text>
+               </children>
+            </AnchorPane>
+        </content>
+      </Tab>
+  </tabs>
+</TabPane>
