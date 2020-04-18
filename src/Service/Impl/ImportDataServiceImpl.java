@@ -8,7 +8,9 @@ public class ImportDataServiceImpl implements ImportDataService {
     Importer importer = new Importer();
     @Override
     public UserAccount getUserAccount() {
-        return importer.start();
+//        /UserAccount start = importer.start();
+//        return start;
+        return null;
     }
 
 }

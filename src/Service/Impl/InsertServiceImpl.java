@@ -19,7 +19,7 @@ public class InsertServiceImpl implements InsertService {
     }
 
     @Override
-    public void insertData(double Income, String note) {
+    public IncomeRecord insertData(double Income, String note) {
         String date = DateMaker.getDate();
         double balance = userAccount.getBalance();
         //日期相同时
@@ -32,5 +32,13 @@ public class InsertServiceImpl implements InsertService {
         }
         balance += Income;
         userAccount.setBalance(balance);
+        return incomeRecord;
+    }
+
+    @Override
+    public IncomeRecord insertData(String date, double Income, String note) {
+        IncomeRecord incomeRecord = insertData(Income, note);
+        incomeRecord.setDate(date);
+        return incomeRecord;
     }
 }

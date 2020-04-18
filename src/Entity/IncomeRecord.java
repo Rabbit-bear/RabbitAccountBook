@@ -1,50 +1,74 @@
 package Entity;
 
-import java.io.Serializable;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+
+import java.io.*;
 import java.util.Date;
 
 public class IncomeRecord implements Serializable {
+
     private static final long serialVersionUID = 6776189745780254037L;
-    double Income;
-    String date;
-    String note;
+    transient private SimpleDoubleProperty Income;
+    transient private SimpleStringProperty date;
+    transient private SimpleStringProperty note;
 
     public IncomeRecord(double income, String date, String note) {
-        Income = income;
-        this.date = date;
-        this.note = note;
-    }
+        Income = new SimpleDoubleProperty(income);
 
-    public double getIncome() {
-        return Income;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public String getNote() {
-        return note;
+        this.date = new SimpleStringProperty(date);
+        this.note = new SimpleStringProperty(note);
     }
 
     public void setIncome(double income) {
-        Income = income;
+        this.Income.set(income);
     }
 
     public void setDate(String date) {
-        this.date = date;
+        this.date.set(date);
     }
 
     public void setNote(String note) {
-        this.note = note;
+        this.note.set(note);
+    }
+
+    public double getIncome() {
+        return Income.get();
+    }
+
+    public String getDate() {
+        return date.get();
+    }
+
+    public String getNote() {
+        return note.get();
+    }
+    //自定义序列化处理
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        double Income = getIncome();
+        String date = getDate();
+        String note = getNote();
+        out.defaultWriteObject();
+        out.writeObject(Income);
+        out.writeObject(date);
+        out.writeObject(note);
+    }
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException{
+        in.defaultReadObject();
+        Income = new SimpleDoubleProperty((Double) in.readObject());
+
+        this.date = new SimpleStringProperty((String) in.readObject());
+        this.note = new SimpleStringProperty((String) in.readObject());
+
     }
 
     @Override
     public String toString() {
         return "IncomeRecord{" +
-                "Income=" + Income +
-                ", date=" + date +
-                ", note='" + note + '\'' +
+                "Income=" + Income.get() +
+                ", date=" + date.get() +
+                ", note='" + note.get() + '\'' +
                 '}';
     }
+
 }

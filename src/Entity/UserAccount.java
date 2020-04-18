@@ -18,6 +18,11 @@ public class UserAccount implements Serializable {
         this.password = password;
     }
 
+    public UserAccount(String username,double target) {
+        this.target = target;
+        this.username = username;
+    }
+
     public void setBalance(double balance) {
         this.balance = balance;
     }

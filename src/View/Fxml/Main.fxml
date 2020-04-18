@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
+<?import java.lang.*?>
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="525.0" tabClosingPolicy="UNAVAILABLE" tabMinHeight="25.0" tabMinWidth="150.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" >
+<TabPane fx:id="TabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="525.0" tabClosingPolicy="UNAVAILABLE" tabMinHeight="25.0" tabMinWidth="150.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <tabs>
     <Tab text="个人界面">
       <content>
@@ -14,15 +16,12 @@
                <children>
                   <Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="419.0" prefWidth="525.0">
                      <children>
-                        <Arc fx:id="RateArc" fill="#f70000" layoutX="389.0" layoutY="276.0" length="360.0" radiusX="100.0" radiusY="100.0" startAngle="90.0" stroke="TRANSPARENT" strokeType="INSIDE" type="ROUND" />
-                        <Circle fill="#1f93ff00" layoutX="389.0" layoutY="276.0" radius="100.0" stroke="BLACK" strokeType="INSIDE" />
-                        <Circle fill="#fdfeff" layoutX="389.0" layoutY="276.0" radius="71.0" stroke="BLACK" strokeType="INSIDE" />
+                        <Circle fill="#e8e8e8" layoutX="389.0" layoutY="276.0" radius="100.0" stroke="#00000051" strokeType="INSIDE" />
                         <Text layoutX="61.0" layoutY="156.0" strokeType="OUTSIDE" strokeWidth="0.0" text="总收益" />
                         <Text layoutX="61.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="最近7天收益" />
                         <Text layoutX="61.0" layoutY="301.0" strokeType="OUTSIDE" strokeWidth="0.0" text="最近30天收益" />
                         <Text layoutX="347.0" layoutY="148.0" strokeType="OUTSIDE" strokeWidth="0.0" text="今日目标完成度" />
                         <Text layoutX="347.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="每日目标：" />
-                        <Text fx:id="target" layoutX="424.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
                         <Text fx:id="balance" layoutX="68.0" layoutY="187.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                            <font>
                               <Font name="Cambria" size="12.0" />
@@ -31,15 +30,18 @@
                         <Text fx:id="weekIncome" layoutX="67.0" layoutY="259.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
                         <Text fx:id="monthIncome" layoutX="67.0" layoutY="335.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
                         <Button fx:id="exitbutton" layoutX="479.0" layoutY="382.0" mnemonicParsing="false" opacity="0.8" text="退出" />
-                        <StackPane fx:id="Stack" layoutX="288.0" layoutY="177.0" prefHeight="199.0" prefWidth="201.0">
+                        <Arc fx:id="RateArc" fill="#ff7f00" layoutX="389.0" layoutY="276.0" length="120.0" radiusX="100.0" radiusY="100.0" startAngle="90.0" stroke="TRANSPARENT" strokeType="INSIDE" type="ROUND" />
+                        <Circle fill="#fdfeff" layoutX="389.0" layoutY="276.0" radius="71.0" stroke="#00000068" strokeType="INSIDE" />
+                        <StackPane fx:id="Stack" layoutX="288.0" layoutY="177.0" opacity="0.73" prefHeight="199.0" prefWidth="201.0">
                            <children>
-                              <Text fx:id="rateText" boundsType="VISUAL" strokeType="OUTSIDE" strokeWidth="0.0" text="60%" wrappingWidth="121.99999299645424">
+                              <Text fx:id="rateText" boundsType="VISUAL" fill="#ff7f00" stroke="#ff7904" strokeType="OUTSIDE" strokeWidth="0.0" text="60%" wrappingWidth="121.99999299645424">
                                  <font>
-                                    <Font size="45.0" />
+                                    <Font size="33.0" />
                                  </font>
                               </Text>
                            </children>
                         </StackPane>
+                        <TextField fx:id="target" layoutX="407.0" layoutY="78.0" prefHeight="23.0" prefWidth="56.0" style="-fx-background-color: transparent;" text="0" />
                      </children>
                   </Pane>
                </children></AnchorPane>
@@ -57,10 +59,18 @@
                       <NumberAxis fx:id="yAxis" side="LEFT" />
                     </yAxis>
                   </LineChart>
+                  <Pane fx:id="Tips" layoutX="400.0" opacity="0.5" prefHeight="50.0" prefWidth="125.0" visible="false">
+                     <children>
+                        <Text fx:id="dateTip" layoutX="50.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2020-04-18" />
+                        <Text fx:id="moneyTip" layoutX="50.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="222.0" />
+                        <Text layoutX="14.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="日期：" />
+                        <Text layoutX="14.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="金额：" />
+                     </children>
+                  </Pane>
                </children></AnchorPane>
       </content>
     </Tab>
-      <Tab fx:id="RecordView" text="历史记录">
+      <Tab fx:id="RecordTab" text="历史记录">
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>

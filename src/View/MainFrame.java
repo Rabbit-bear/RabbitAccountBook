@@ -6,7 +6,6 @@ import Entity.IncomeRecord;
 import Entity.UserAccount;
 import Service.DeleteService;
 import Service.Function.Calculator;
-import Service.Function.DateMaker;
 import Service.Function.RecordListMaker;
 import Service.Impl.DeleteServiceImpl;
 import Service.Impl.InsertServiceImpl;
@@ -15,36 +14,36 @@ import Service.Impl.UpdateServiceImpl;
 import Service.InsertService;
 import Service.SignUpService;
 import Service.UpdateService;
-
 import javafx.application.Application;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.AccessibleRole;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Arc;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
 
-
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.regex.Pattern;
 
 public class MainFrame extends Application {
     //
@@ -61,23 +60,27 @@ public class MainFrame extends Application {
     RecordListMaker recordListMaker;
 
 
-
-    Parent parent = FXMLLoader.load(getClass().getResource("Main.fxml"));
+    //资源加载
+    Image Icon = new Image("file:"+Thread.currentThread().getContextClassLoader().getResource("config/icon.jpg").getPath());
+    Parent parent = FXMLLoader.load(getClass().getResource("Fxml/Main.fxml"));
     Parent saveParent =  FXMLLoader.load(getClass().getResource("Fxml/saveView.fxml"));
+    @FXML
     Parent pane = (Parent) parent.lookup("#pane");
-
+    TabPane tabPane = (TabPane)((Object)parent);
     Button exitButton = (Button) parent.lookup("#exitbutton");
 
     //个人界面
     Text balance = (Text)pane.lookup("#balance");
     Text weekIncome = (Text)pane.lookup("#weekIncome");
     Text monthIncome = (Text)pane.lookup("#monthIncome");
-    Text target = (Text)pane.lookup("#target");
+
+    TextField target = (TextField)pane.lookup("#target");
     Parent Stack = (Parent) pane.lookup("#Stack");
     Text rateText = (Text)Stack.lookup("#rateText");
     Arc RateArc = (Arc)pane.lookup("#RateArc");
 
     //表格界面
+    Tab RecordTab = tabPane.getTabs().get(2);
     TableView table = (TableView)parent.lookup("#Table");
     TableColumn dateColumn = table.getVisibleLeafColumn(0);
     TableColumn moneyColumn = table.getVisibleLeafColumn(1);
@@ -87,8 +90,13 @@ public class MainFrame extends Application {
     Button insertButton = (Button)parent.lookup("#insert");
     Button updateButton = (Button)parent.lookup("#update");
     Button deleteButton = (Button)parent.lookup("#delete");
-
+    Text successTip = (Text)parent.lookup("#successTip");
+    Text failTip = (Text)parent.lookup("#failTip");
+    Tab RecordView;
     //曲线图界面
+    Parent Tips = (Parent) parent.lookup("#Tips");
+    Text dateTip = (Text)Tips.lookup("#dateTip");
+    Text moneyTip = (Text)Tips.lookup("#moneyTip");
     LineChart<String,Number> lineChart = (LineChart)parent.lookup("#lineChart");
     CategoryAxis xAxis = (CategoryAxis)parent.lookup("#xAxis");
     NumberAxis yAxis = (NumberAxis)parent.lookup("#yAxis");
@@ -110,7 +118,6 @@ public class MainFrame extends Application {
     Button signUp = (Button)SignUpparent.lookup("#signUp");
 
     public MainFrame() throws IOException {
-
     }
     //初始化服务，添加注册程序
     public boolean InitServices(){
@@ -177,7 +184,44 @@ public class MainFrame extends Application {
     }
     //加入监听模块
     public void addActon(Stage stage){
+        //个人界面监听
 
+        target.textProperty().addListener(new InvalidationListener() {
+            @Override
+            public void invalidated(Observable observable) {
+                if(checkInput(target.getText())){
+                    double targetNum = Double.parseDouble(target.getText());
+                    if(targetNum!=userAccount.getTarget()){
+                        isChange = true;
+                        userAccount.setTarget(targetNum);
+                        //刷新数据
+                        rateText.setText(Integer.toString((int)(calculator.getCompleteness()*100))+"%");
+                        RateArc.setLength(360 * calculator.getCompleteness());
+                    }
+                }
+
+
+            }
+        });
+        target.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                pane.requestFocus();
+            }
+        });
+
+        //表格tab监听
+        //刷新提示语
+        RecordTab.setOnSelectionChanged(new EventHandler<Event>() {
+            @Override
+            public void handle(Event event) {
+                if(!RecordTab.isSelected()){
+                    successTip.setVisible(false);
+                    failTip.setVisible(false);
+                }
+
+            }
+        });
         //插入按钮
         insertButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -200,7 +244,15 @@ public class MainFrame extends Application {
                     }
                     //刷新画面
                     refreshData();
+                    successTip.setVisible(true);
+                    failTip.setVisible(false);
                 }
+                else {
+                    successTip.setVisible(false);
+                    failTip.setVisible(true);
+                }
+                incomeField.clear();
+                noteField.clear();
             }
         });
         //更新按钮
@@ -225,8 +277,16 @@ public class MainFrame extends Application {
                         chartList.set(index, chartData);
                         //刷新画面
                         refreshData();
+                        successTip.setVisible(true);
+                        failTip.setVisible(false);
+                    }
+                    else {
+                        successTip.setVisible(false);
+                        failTip.setVisible(true);
                     }
                 }
+                incomeField.clear();
+                noteField.clear();
             }
         });
         //删除按钮
@@ -246,8 +306,13 @@ public class MainFrame extends Application {
                     deleteService.DeleteData(index);
                     //刷新画面
                     refreshData();
+                    successTip.setVisible(true);
+                    failTip.setVisible(false);
                 }
+                incomeField.clear();
+                noteField.clear();
             }
+
         });
         //退出程序
         exitButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -294,11 +359,34 @@ public class MainFrame extends Application {
             XYChart.Data data = new XYChart.Data(incomeRecord.getDate(),incomeRecord.getIncome());
             list.add(data);
             //加入控件显示
-
-
-            data.setNode(new Text(Double.toString(incomeRecord.getIncome())));
-
-
+            Text text = new Text(Double.toString(incomeRecord.getIncome()));
+            Node symbol = new StackPane();
+            symbol.setAccessibleRole(AccessibleRole.TEXT);
+            //曲线图结点监听
+            symbol.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    double x = symbol.getLayoutX() + 80;
+                    double y = symbol.getLayoutY();
+                    double tips_width = Tips.getBoundsInParent().getWidth();
+                    if(x+tips_width>525){
+                        x = 525-Tips.getBoundsInParent().getWidth();
+                    }
+                    Tips.setLayoutX(x);
+                    Tips.setLayoutY(y);
+                    //刷新tip组件
+                    Tips.setVisible(true);
+                    dateTip.setText(data.getXValue().toString());
+                    moneyTip.setText(data.getYValue().toString());
+                }
+            });
+            symbol.setOnMouseExited(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    Tips.setVisible(false);
+                }
+            });
+            data.setNode(symbol);
         }
         series.setData(list);
     }
@@ -317,14 +405,14 @@ public class MainFrame extends Application {
 
         if(!InitServices()){
             //primaryStage.close();
-            //注册窗口
+            //初始化窗口
             signUp.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     if(checkInput(targetField.getText())){
                         userAccount = signUpService.SignUp(username.getText(), Double.parseDouble(targetField.getText()));
                         exporter.start(userAccount);
-                        System.out.println("注册成功");
+                        System.out.println("初始化成功");
 
                         signUpStage.close();
                         try {
@@ -344,9 +432,10 @@ public class MainFrame extends Application {
             signUpService = new SignUpServiceImpl();
             signUpStage.setScene(new Scene(SignUpparent));
             signUpStage.setResizable(false);
-            signUpStage.setTitle("注册");
+            signUpStage.setTitle("初始化");
             signUpStage.centerOnScreen();
             signUpStage.setAlwaysOnTop(true);
+            signUpStage.getIcons().add(Icon);
             signUpStage.show();
             return;
         }
@@ -358,7 +447,12 @@ public class MainFrame extends Application {
         primaryStage.centerOnScreen();
         primaryStage.setResizable(false);
         primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.getIcons().add(Icon);
         primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        Application.launch();
     }
 }
 

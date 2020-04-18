@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.stage.*?>
+
+<AnchorPane prefHeight="98.0" prefWidth="255.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+            <children>
+               <Text fill="#0d8fd0" layoutX="61.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="是否将更改保存？" wrappingWidth="151.0">
+                  <font>
+                     <Font size="16.0" />
+                  </font></Text>
+               <Button fx:id="save" layoutX="72.0" layoutY="62.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="48.0" text="保存" />
+               <Button fx:id="cancel" layoutX="192.0" layoutY="62.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="40.0" text="取消" />
+               <Button fx:id="dontsave" layoutX="128.0" layoutY="62.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="57.0" text="不保存" />
+            </children></AnchorPane>

@@ -4,5 +4,6 @@ import Entity.IncomeRecord;
 import Entity.UserAccount;
 
 public interface InsertService {
-    public void insertData(double Income, String note);
+    public IncomeRecord insertData(double Income, String note);
+    public IncomeRecord insertData(String date, double Income, String note);
 }

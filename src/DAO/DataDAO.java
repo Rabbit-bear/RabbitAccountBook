@@ -1,8 +1,7 @@
 package DAO;
 
-import Entity.UserAccount;
+import java.net.URLDecoder;
 
 public interface DataDAO {
-    final String path = "DataFiles\\data";
+    String path = Thread.currentThread().getContextClassLoader().getResource("config\\data").getPath();
 }
-

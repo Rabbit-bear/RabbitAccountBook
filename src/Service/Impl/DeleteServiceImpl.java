@@ -16,8 +16,9 @@ public class DeleteServiceImpl implements DeleteService {
         }
     }
     @Override
-    public void DeleteData(IncomeRecord incomeRecord) {
+    public void DeleteData(int index) {
         if(list==null)return;
+        IncomeRecord incomeRecord = list.get(index);
         double balance = userAccount.getBalance();
         balance -= incomeRecord.getIncome();
         list.remove(incomeRecord);
